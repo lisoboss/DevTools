@@ -26,7 +26,7 @@ class Tab(QTabWidget):
         self._titles = {}
 
         # 设置样式 
-        # self.setTabShape(QTabWidget.Triangular)
+        self.setTabShape(QTabWidget.Triangular)
         # self.setDocumentMode(True)
         self.setMovable(True)
         self.setTabsClosable(True)
@@ -56,6 +56,8 @@ class Main(QMainWindow):
         
         self.setWindowTitle('DevTools')
         # self.setWindowIconText('./DevTools.icon')
+        # 将窗口的位置设置为屏幕坐标 (100, 100)，并将窗口的宽度和高度设置为 400 和 200。
+        self.setGeometry(100, 100, 400, 200)
 
         self.modules = {}
         self.tab = Tab(self)
