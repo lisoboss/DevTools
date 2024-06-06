@@ -3,28 +3,19 @@
 
 from json import loads, dumps
 from logging import getLogger
-from PyQt5.QtWidgets import (
-    QVBoxLayout,
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QPushButton,
-)
+from PyQt5.QtWidgets import QLabel, QLineEdit, QTextEdit, QPushButton, QComboBox
 from requests import Session
-from modules.base import BaseModule
+from core.base import BaseModule
 from utils.cookies import cookiejar_from_list
 
 
 LOG = getLogger(__name__)
 
 
-class Module(BaseModule):
+class HttpModule(BaseModule):
     name = 'http'
 
-    def send(self, method, url, headers, cookies):
-        if method not in ('GET', 'POST'):
-            return 'method not in (\'GET\', \'POST\')'
-
+    def send(self, method, url, headers, cookies, encode):
         if not url:
             return 'url is null'
 
@@ -52,6 +43,7 @@ class Module(BaseModule):
 
         status = '%s' % rp
 
+        rp.encoding = encode
         text = rp.text
 
         try:
@@ -60,37 +52,46 @@ class Module(BaseModule):
         except:
             return '%s\n\n%s' % (status, text)
     
-    def layout(self):
-        layout = QVBoxLayout()
-
-        layout.addWidget(QLabel('url'), 1)
+    def draw(self):
+        self.layout.addWidget(QLabel('url'), 1)
         url = QLineEdit()
-        layout.addWidget(url, 1)
-        layout.addWidget(QLabel('headers'), 1)
+        self.layout.addWidget(url, 1)
+        self.layout.addWidget(QLabel('headers'), 1)
         headers = QTextEdit()
-        layout.addWidget(headers, 5)
-        layout.addWidget(QLabel('cookies'), 1)
+        self.layout.addWidget(headers, 5)
+        self.layout.addWidget(QLabel('cookies'), 1)
         cookies = QTextEdit()
-        layout.addWidget(cookies, 5)
-        layout.addWidget(QLabel('method'), 1)
-        method = QLineEdit()
-        layout.addWidget(method, 1)
+        self.layout.addWidget(cookies, 5)
+        self.layout.addWidget(QLabel('method'), 1)
+        method = QComboBox()
+        method.addItem('GET')
+        method.addItem('POST')
+        method.addItem('PUT')
+        method.addItem('HEAD')
+        method.addItem('DELETE')
+        method.addItem('OPTIONS')
+        method.addItem('TRACE')
+        method.addItem('CONNECT')
+        self.layout.addWidget(method, 1)
         send = QPushButton('send')
-        layout.addWidget(send, 1)
-        layout.addWidget(QLabel('text'), 1)
+        self.layout.addWidget(send, 1)
+
+        self.layout.addWidget(QLabel('encode'), 1)
+        encode = QLineEdit('UTF-8')
+        self.layout.addWidget(encode, 5)
+
+        self.layout.addWidget(QLabel('text'), 1)
         text = QTextEdit()
-        layout.addWidget(text, 30)
+        self.layout.addWidget(text, 30)
 
         # event
 
         def callback():
-            self.flush(text.setPlainText, 'loadding...')
+            self.flush_text(text.setPlainText, 'loadding...')
             try:
-                self.flush(text.setPlainText, self.send(method.text(), url.text(), headers.toPlainText(), cookies.toPlainText()))
+                self.flush_text(text.setPlainText, self.send(method.currentText(), url.text(), headers.toPlainText(), cookies.toPlainText(), encode.text()))
             except Exception as e:
                 LOG.exception(e)
-                self.flush(text.setPlainText, str(e))
+                self.flush_text(text.setPlainText, str(e))
     
         send.clicked.connect(callback)
-
-        return layout

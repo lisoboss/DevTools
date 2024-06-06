@@ -3,20 +3,15 @@
 
 from json import loads, dumps
 from logging import getLogger
-from PyQt5.QtWidgets import (
-    QVBoxLayout,
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QPushButton,
-)
-from modules.base import BaseModule
+
+from PyQt5.QtWidgets import QTextEdit, QPushButton
+from core.base import BaseModule
 
 
 LOG = getLogger(__name__)
 
 
-class Module(BaseModule):
+class JsonModule(BaseModule):
     name = 'json'
 
     def format(self, text):
@@ -38,41 +33,33 @@ class Module(BaseModule):
         return text
 
     
-    def layout(self):
-        layout = QVBoxLayout()
-
+    def draw(self):
         f = QPushButton('Format')
-        layout.addWidget(f, 1)
+        self.layout.addWidget(f, 1)
         uf = QPushButton('UnFormat')
-        layout.addWidget(uf, 1)
+        self.layout.addWidget(uf, 1)
         body = QTextEdit()
-        layout.addWidget(body, 30)
+        self.layout.addWidget(body, 30)
 
         # event
 
         def f_callback():
             text = body.toPlainText()
-            self.flush(body.setPlainText, 'loadding...')
+            self.flush_text(body.setPlainText, 'loadding...')
             try:
-                self.flush(body.setPlainText, self.format(text))
+                self.flush_text(body.setPlainText, self.format(text))
             except Exception as e:
                 LOG.exception(e)
-                self.flush(body.setPlainText, 'not json %s' % str(e))
+                self.flush_text(body.setPlainText, 'not json %s' % str(e))
 
         def uf_callback():
             text = body.toPlainText()
-            self.flush(body.setPlainText, 'loadding...')
+            self.flush_text(body.setPlainText, 'loadding...')
             try:
-                self.flush(body.setPlainText, self.unformat(text))
+                self.flush_text(body.setPlainText, self.unformat(text))
             except Exception as e:
                 LOG.exception(e)
-                self.flush(body.setPlainText, str(e))
+                self.flush_text(body.setPlainText, str(e))
     
         f.clicked.connect(f_callback)
         uf.clicked.connect(uf_callback)
-
-        return layout
-    
-        send.clicked.connect(callback)
-
-        return layout

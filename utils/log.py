@@ -188,9 +188,3 @@ def init_root_logger(file_name='root'):
         _logger.addHandler(error_file_handle)
 
         root_logger = _logger
-
-
-def init_logger(name='root'):
-    init_root_logger(name)
-
-    return getLogger(name)
