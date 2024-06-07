@@ -131,3 +131,7 @@ dmypy.json
 # 
 /cache
 /logs
+
+
+.vscode
+.idea
