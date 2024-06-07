@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from logging import getLogger
-from pkgutil import iter_modules
-from importlib.util import module_from_spec
 from PyQt5.QtWidgets import QAction, QWidget, QMainWindow, QVBoxLayout
 from core.ui.tab import Tab
 from core.base import BaseModule
-import modules
+from utils.obj import load_modules
+import plugins
 
 
 LOG = getLogger(__name__)
@@ -55,7 +54,7 @@ class Main(QMainWindow):
         # 创建一个工具栏：
         bar_tool = self.addToolBar('工具栏')
 
-        load_modules(modules)
+        load_modules(plugins)
 
         for Module in BaseModule.__subclasses__(): 
             LOG.info('add %s' % Module)
@@ -64,13 +63,3 @@ class Main(QMainWindow):
             bar_tool.addAction(self.get_bar(Module.name, self.create_callback(self.tab.add, Module)))
             # 为添加分割线：
             bar_tool.addSeparator()
-
-
-def load_modules(parent):
-    for importer, module_name, is_package in iter_modules(parent.__path__):
-            spec = importer.find_spec(module_name)
-            module = module_from_spec(spec)
-            if is_package:
-                load_modules(module)
-            else:
-                spec.loader.exec_module(module)
