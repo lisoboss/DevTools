@@ -8,13 +8,13 @@ python main.py
 
 ## 添加模块
 
-模版 `modules/json.py`
+模版 `plugins/json_.py`
 
-单一文件放入 `modules` 目录即可
+单一文件放入 `plugins` 目录即可
 
-如果为目录, 则在目录里添加 `__init__.py` 文件, 并放入`modules` 目录即可
+如果为目录, 则在目录里添加 `__init__.py` 文件, 并放入`plugins` 目录即可
 
-例如：`modules/http.py`
+例如：`plugins/http_.py`
 
 ## UITool
 

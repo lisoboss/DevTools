@@ -4,6 +4,7 @@ import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+
 class TreeWidget(QTreeWidget):
     def __init__(self):
         super().__init__()
@@ -25,7 +26,7 @@ class TreeWidget(QTreeWidget):
                 if item.text(0) != "Root":
                     parent = item.parent()
                     if parent:
-                        parent.removeChild(item)     
+                        parent.removeChild(item)
         else:
             super().keyPressEvent(event)
 
@@ -35,7 +36,7 @@ class B:
     value = {}
 
     def setFlags(self):
-        self.item.setFlags(self.item.flags() | Qt.ItemIsEditable) # 设置可编辑
+        self.item.setFlags(self.item.flags() | Qt.ItemIsEditable)  # 设置可编辑
         # self.item.setFlags(self.item.flags() | Qt.ItemIsEditable | Qt.ItemIsUserCheckable) # 设置可编辑
         self.item.setFlags(self.item.flags() | Qt.ItemIsUserCheckable)
         self.item.setFlags(self.item.flags() & ~Qt.ItemIsDropEnabled)
@@ -54,13 +55,13 @@ class B:
 
 class Group(B):
     name = 'Group'
-    value = { 
+    value = {
         'layout': 'H',
         'weight': '1',
     }
 
     def setFlags(self):
-        self.item.setFlags(self.item.flags() | Qt.ItemIsEditable) # 设置可编辑
+        self.item.setFlags(self.item.flags() | Qt.ItemIsEditable)  # 设置可编辑
 
     @staticmethod
     def add(parent, value):
@@ -75,11 +76,11 @@ class Group(B):
             l = QVBoxLayout()
         else:
             l = QHBoxLayout()
-        
+
         w.setLayout(l)
 
         return l
-    
+
     @staticmethod
     def A(t, p, text, value):
         weight = value['weight']
@@ -92,9 +93,9 @@ class Group(B):
         text += f'{ttt} = Q{l}BoxLayout()\n'
         text += f'{tt}.setLayout({ttt})\n'
         text += f'{p}.addWidget({tt}, {weight})\n\n'
-        
+
         return ttt, text
-    
+
 
 class Item_QLabel(B):
     name = 'QLabel'
@@ -106,12 +107,12 @@ class Item_QLabel(B):
     @staticmethod
     def add(parent, value):
         parent.addWidget(QLabel(value['name']), int(value['weight']))
-    
+
     @staticmethod
     def A(t, p, text, value):
         name = value['name']
         weight = value['weight']
-        
+
         tt = f'qLabel{t}_{TTT()}'
 
         text += f'# {name}\n'
@@ -119,7 +120,7 @@ class Item_QLabel(B):
         text += f'{p}.addWidget({tt}, {weight})\n\n'
 
         return text
-    
+
 
 class Item_QLineEdit(B):
     name = 'QLineEdit'
@@ -131,12 +132,12 @@ class Item_QLineEdit(B):
     @staticmethod
     def add(parent, value):
         parent.addWidget(QLineEdit(), int(value['weight']))
-    
+
     @staticmethod
     def A(t, p, text, value):
         name = value['name']
         weight = value['weight']
-        
+
         tt = f'qLineEdit{t}_{TTT()}'
 
         text += f'# {name}\n'
@@ -156,12 +157,12 @@ class Item_QTextEdit(B):
     @staticmethod
     def add(parent, value):
         parent.addWidget(QTextEdit(), int(value['weight']))
-    
+
     @staticmethod
     def A(t, p, text, value):
         name = value['name']
         weight = value['weight']
-        
+
         tt = f'qTextEdit{t}_{TTT()}'
 
         text += f'# {name}\n'
@@ -181,12 +182,12 @@ class Item_QPushButton(B):
     @staticmethod
     def add(parent, value):
         parent.addWidget(QPushButton(value['name']), int(value['weight']))
-    
+
     @staticmethod
     def A(t, p, text, value):
         name = value['name']
         weight = value['weight']
-        
+
         tt = f'qPushButton{t}_{TTT()}'
 
         text += f'# {name}\n'
@@ -195,7 +196,7 @@ class Item_QPushButton(B):
         text += f'{p}.addWidget({tt}, {weight})\n\n'
 
         return text
-    
+
 
 class Item_QComboBox(B):
     name = 'QComboBox'
@@ -211,13 +212,13 @@ class Item_QComboBox(B):
         for o in value['option'].split(","):
             q.addItem(o)
         parent.addWidget(q, int(value['weight']))
-    
+
     @staticmethod
     def A(t, p, text, value):
         name = value['name']
         weight = value['weight']
         option = value['option']
-        
+
         tt = f'qComboBox{t}_{TTT()}'
 
         text += f'# {name}\n'
@@ -228,7 +229,6 @@ class Item_QComboBox(B):
         text += f'{p}.addWidget({tt}, {weight})\n\n'
 
         return text
-
 
 
 def A(name, value):
@@ -268,7 +268,7 @@ class MainWindow(QMainWindow):
         w = QWidget()
         l = QVBoxLayout()
         w.setLayout(l)
-        
+
         w1 = QWidget()
         l1 = QHBoxLayout()
         w1.setLayout(l1)
@@ -278,14 +278,13 @@ class MainWindow(QMainWindow):
         l1.addWidget(b)
 
         for Item in K.values():
-
             def C(Item):
                 b = QPushButton(Item.name)
                 b.clicked.connect(lambda _: Item(root))
-                l1.addWidget(b) 
-            
+                l1.addWidget(b)
+
             C(Item)
-        
+
         l.addWidget(w1)
 
         w1 = QWidget()
@@ -305,7 +304,7 @@ class MainWindow(QMainWindow):
         w2 = QWidget()
         l = QHBoxLayout()
         w2.setLayout(l)
-        
+
         w3 = QWidget()
         l2 = QVBoxLayout()
         w3.setLayout(l2)
@@ -329,10 +328,10 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(QLabel('Null'))
         self.layout = layout
-        
+
         container = QWidget()
         container.setLayout(l)
-        
+
         self.setCentralWidget(container)
 
     def iter(self, item: QTreeWidgetItem):
@@ -348,7 +347,7 @@ class MainWindow(QMainWindow):
                 _lroot = Group.add(lroot, value)
                 self.set_layout(_lroot, item)
                 continue
-            
+
             K[name].add(lroot, value)
 
     @staticmethod
@@ -378,7 +377,6 @@ class MainWindow(QMainWindow):
                 else:
                     K[name].edit(self.edit_layout, value, update)
 
-
     def refresh(self, root: QTreeWidgetItem):
         self.clear_layout(self.layout)
         self.set_layout(self.layout, root)
@@ -391,16 +389,16 @@ class MainWindow(QMainWindow):
                 value = json.loads(item.text(2))
                 if name == "Group":
                     _p_s, text = Group.A(t, p_s, text, value)
-                    text = A(item, t+1, _p_s, text)
+                    text = A(item, t + 1, _p_s, text)
                 else:
-                   text = K[name].A(t, p_s, text, value)
+                    text = K[name].A(t, p_s, text, value)
 
             return text
 
-        text = A(root, 1, 'layout', '\n\n------------\n\nlayout = QVBoxLayout()\n\n')
+        text = A(root, 1, 'self.layout', '\n\n------------\n\n')
 
         print(text)
-        
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
