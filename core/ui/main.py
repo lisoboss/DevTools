@@ -20,7 +20,7 @@ class Main(QMainWindow):
         self.setWindowTitle('DevTools')
         # self.setWindowIconText('./DevTools.icon')
         # 将窗口的位置设置为屏幕坐标 (100, 100)，并将窗口的宽度和高度设置为 400 和 200。
-        self.setGeometry(100, 100, 400, 200)
+        self.setGeometry(100, 100, 800, 700)
 
         self.tab = Tab(self)
 
